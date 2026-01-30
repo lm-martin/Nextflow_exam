@@ -2,7 +2,7 @@
 --accession :Enter accession number to override the default value. Default M21012
 --in :Provide a file path or a glob pattern, e.g., "data/<filename.fasta>" or 
      "data/<filename.fa>" or "data/*.fasta" or "data/*.fa"
---profile apple_silicon :Include this option if you run this pipline on macOS
+-profile apple_silicon :Include this option if you run this pipline on macOS
 */
 
 // _______________________________
@@ -52,30 +52,37 @@ process get_merge_data {
 
 // aligning fasta seqs
 process mafft_aligner {
-    conda "mafft=7.526"
+    conda "mafft=7.525"
 
     input:
         path merged_data
 
     output:
-        path "alignment.fasta"
+        path "alignment.fasta", emit: alignment_raw
 
     script:
         """
-        mafft $merged_data > alignment.fasta
+        mafft --clustalout $merged_data > alignment.fasta
         """
 }
 
-// // cleaning alignment
-// process trimal_cleanup {
-//     input:
+// cleaning alignment
+process trimal_cleanup {
+    conda "trimal=1.5.0"
 
-//     output:
+    input:
+        path alignment_raw_data
 
-//     script:
-// }
+    output:
+        path "alignment_clean"
 
-//
+    script:
+        """
+
+        """
+}
+
+
 
 // _______________________________
 //         Workflow
@@ -98,5 +105,7 @@ workflow {
         .collect()
         | get_merge_data
         | mafft_aligner
+        | trimal_cleanup
+            | view
       
 }
