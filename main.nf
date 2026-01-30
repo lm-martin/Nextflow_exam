@@ -19,6 +19,7 @@ params.in = null
 // download the reference genome
 process ref_get {
     conda "bioconda::entrez-direct=24.0"
+    //publishDir "data"
 
     input:
         val accession
@@ -35,24 +36,32 @@ process ref_get {
 
 // get merge input data
 process get_merge_data {
+
     input:
         path fasta_files
+        
 
     output:
         path "merged_data.fasta"
+
     script:
         """
         cat ${fasta_files} > merged_data.fasta
         """
 }
 
-// // aligning fasta seqs
+// aligning fasta seqs
 // process mafft_aligner {
+//     conda "mafft=7.526"
+
 //     input:
 
 //     output:
 
 //     script:
+//         """
+
+//         """
 // }
 
 // // cleaning alignment
@@ -81,8 +90,10 @@ workflow {
     def ch_reference = ref_get(params.accession)
         //| view
     
-    def ch_merge_data = channel.fromPath(params.in)
-    .collect()
+    def ch_local_data = channel.fromPath(params.in)
+    ch_reference
+        .mix(ch_local_data)
+        .collect()
         | get_merge_data
-        
+      
 }
