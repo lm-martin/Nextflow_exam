@@ -58,11 +58,11 @@ process mafft_aligner {
         path merged_data
 
     output:
-        path "alignment.fasta", emit: alignment_raw
+        path "alignment.aln", emit: alignment_raw
 
     script:
         """
-        mafft --clustalout $merged_data > alignment.fasta
+        mafft --clustalout $merged_data > alignment.aln
         """
 }
 
@@ -74,15 +74,17 @@ process trimal_cleanup {
         path alignment_raw_data
 
     output:
-        path "alignment_clean"
+        path "alignment_clean.fasta", emit: alignment_final
+        path "alignment_report.html", emit: html_report
 
     script:
         """
-
+        trimal -in $alignment_raw_data \\
+        -out alignment_clean.fasta \\
+        -htmlout alignment_report.html \\
+        -automated1
         """
 }
-
-
 
 // _______________________________
 //         Workflow
@@ -106,6 +108,5 @@ workflow {
         | get_merge_data
         | mafft_aligner
         | trimal_cleanup
-            | view
       
 }
