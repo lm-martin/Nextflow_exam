@@ -69,6 +69,7 @@ process mafft_aligner {
 // cleaning alignment
 process trimal_cleanup {
     conda "trimal=1.5.0"
+    publishDir "reports"
 
     input:
         path alignment_raw_data
@@ -110,3 +111,6 @@ workflow {
         | trimal_cleanup
       
 }
+
+// report to a folder outside work folder
+// fix the glob pattern in the params.in
