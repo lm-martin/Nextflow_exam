@@ -1,7 +1,16 @@
 /*
+This pipeline handles only fasta files.
+It download a references genome seq from SRA and uses local stored data to perform
+an aligment cleanup the alignment and report a final alignment.aln and html file from 
+trimal.
+Reports are push out to a default folder report
+
 --accession :Enter accession number to override the default value. Default M21012
---in :Provide a file path or a glob pattern, e.g., "data/<filename.fasta>" or 
-     "data/<filename.fa>" or "data/*.fasta" or "data/*.fa"
+
+--in :Provide a file path or a glob pattern to override the default value, 
+    e.g., "data/<filename.fasta>" or "data/<filename.fa>" 
+    or "data/*.fasta" or "data/*.fa". default "data/*.fasta"
+
 -profile apple_silicon :Include this option if you run this pipline on macOS
 */
 
@@ -10,7 +19,7 @@
 // _______________________________
 
 params.accession = "M21012" //set to default
-params.in = null
+//params.in = "data/*.fasta"
 
 // _______________________________
 //         Processes
@@ -111,6 +120,3 @@ workflow {
         | trimal_cleanup
       
 }
-
-// report to a folder outside work folder
-// fix the glob pattern in the params.in
