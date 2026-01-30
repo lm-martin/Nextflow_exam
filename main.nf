@@ -19,7 +19,7 @@ Reports are push out to a default folder report
 // _______________________________
 
 params.accession = "M21012" //set to default
-//params.in = "data/*.fasta"
+params.in = "data/*.fasta"  //set to default
 
 // _______________________________
 //         Processes
