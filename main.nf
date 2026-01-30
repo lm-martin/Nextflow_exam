@@ -33,15 +33,18 @@ process ref_get {
         """
 }
 
-// // get merge input data
-// process get_merge_data {
-//     input:
+// get merge input data
+process get_merge_data {
+    input:
+        path fasta_files
 
-//     output:
-
-//     script:
-        
-// }
+    output:
+        path "merged_data.fasta"
+    script:
+        """
+        cat ${fasta_files} > merged_data.fasta
+        """
+}
 
 // // aligning fasta seqs
 // process mafft_aligner {
@@ -76,5 +79,10 @@ workflow {
     //println("$params.accession, $params.in")
 
     def ch_reference = ref_get(params.accession)
-        | view
+        //| view
+    
+    def ch_merge_data = channel.fromPath(params.in)
+    .collect()
+        | get_merge_data
+        
 }
