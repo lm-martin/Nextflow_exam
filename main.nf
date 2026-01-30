@@ -1,8 +1,8 @@
 /*
---accession Enter accession number to override the default value. Default M21012
---in Provide a file path or a glob pattern, e.g., "data/<filename.fasta>" or 
+--accession :Enter accession number to override the default value. Default M21012
+--in :Provide a file path or a glob pattern, e.g., "data/<filename.fasta>" or 
      "data/<filename.fa>" or "data/*.fasta" or "data/*.fa"
---profile apple_silicon Include this option if you run this pipline on macOS
+--profile apple_silicon :Include this option if you run this pipline on macOS
 */
 
 // _______________________________
@@ -17,42 +17,49 @@ params.in = null
 // _______________________________
 
 // download the reference genome
-process ref_get{
+process ref_get {
+    conda "bioconda::entrez-direct=24.0"
+
     input:
+        val accession
 
     output:
+        path "${accession}.fasta"
 
     script:
+        """
+        esearch -db nucleotide -query "$accession" \\
+        | efetch -format fasta > "${accession}.fasta"
+        """
+}
+
+// // get merge input data
+// process get_merge_data {
+//     input:
+
+//     output:
+
+//     script:
         
-}
+// }
 
-// get merge input data
-process get_merge_data{
-    input:
+// // aligning fasta seqs
+// process mafft_aligner {
+//     input:
 
-    output:
+//     output:
 
-    script:
-        
-}
+//     script:
+// }
 
-// aligning fasta seqs
-process mafft_aligner{
-    input:
+// // cleaning alignment
+// process trimal_cleanup {
+//     input:
 
-    output:
+//     output:
 
-    script:
-}
-
-// cleaning alignment
-process trimal_cleanup{
-    input:
-
-    output:
-
-    script:
-}
+//     script:
+// }
 
 //
 
@@ -66,7 +73,8 @@ workflow {
         exit 1
     }
 
-    println("$params.accession, $params.in")
+    //println("$params.accession, $params.in")
 
-    
+    def ch_reference = ref_get(params.accession)
+        | view
 }
