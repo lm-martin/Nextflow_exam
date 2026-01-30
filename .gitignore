@@ -55,7 +55,8 @@ bin/
 *.fq
 *.fastq.gz
 *.bam
-*.sam
+*.sam.
+*.fasta
 
 # --- Local databases from MacOS ---
 .DS_Store
