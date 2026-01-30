@@ -1,3 +1,7 @@
+# This gitignore is a java gitignore github template and 
+# The nextflow ignore section was added by me
+
+# --- Java ---
 # Compiled class file
 *.class
 
@@ -22,3 +26,35 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# --- Nextflow Workflows ---
+# Avoid uploading heavy stuffs like intermediate files resulted from computation
+work/
+
+# log files and local data bases 
+.nextflow/
+.nextflow.log*
+
+# --- Automatic reports ---
+*.html
+*.pdf
+trace.txt*
+dag.dot*
+
+# --- Environments ---
+# in case of using Conda or Docker inside Nextflow
+conda/
+.env/
+.venv/
+bin/
+
+# --- Data (Opcional but recommended) ---
+# avoid uploading fastq or bam files accidentally
+*.fastq
+*.fq
+*.fastq.gz
+*.bam
+*.sam
+
+# --- Local databases from MacOS ---
+.DS_Store
