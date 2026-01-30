@@ -1,10 +1,23 @@
-/*
+// Help section
+
+params.help = null
+
+def usage() {
+    log.info"""
+
+DESCRIPTION
 This pipeline handles only fasta files.
 It download a references genome seq from SRA and uses local stored data to perform
 an aligment cleanup the alignment and report a final alignment.aln and html file from 
 trimal.
 Reports are push out to a default folder report
 
+SYNOPSIS
+nextflow run main.nf [options]
+bash line: nextflow run main.nf  
+run from github: nextflow run lm-martin/Nextflow_exam
+
+OPTIONS
 --accession :Enter accession number to override the default value. Default M21012
 
 --in :Provide a file path or a glob pattern to override the default value, 
@@ -12,7 +25,7 @@ Reports are push out to a default folder report
     or "data/*.fasta" or "data/*.fa". default "data/*.fasta"
 
 -profile apple_silicon :Include this option if you run this pipline on macOS
-*/
+"""
 
 // _______________________________
 //         Parameters
@@ -106,8 +119,6 @@ workflow {
         exit 1
     }
 
-    //println("$params.accession, $params.in")
-
     def ch_reference = ref_get(params.accession)
         //| view
     
@@ -118,5 +129,4 @@ workflow {
         | get_merge_data
         | mafft_aligner
         | trimal_cleanup
-      
 }
