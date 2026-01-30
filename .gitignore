@@ -30,6 +30,7 @@ replay_pid*
 # --- Nextflow Workflows ---
 # Avoid uploading heavy stuffs like intermediate files resulted from computation
 work/
+reports/
 
 # log files and local data bases 
 .nextflow/
