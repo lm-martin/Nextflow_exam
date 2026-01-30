@@ -26,6 +26,7 @@ OPTIONS
 
 -profile apple_silicon :Include this option if you run this pipline on macOS
 """
+}
 
 // _______________________________
 //         Parameters
@@ -114,6 +115,11 @@ process trimal_cleanup {
 // _______________________________
 
 workflow {
+    if (params.help) {
+    usage()
+    exit 0
+  }
+
     if (params.in == null) {
         println("Missing input data")
         exit 1
