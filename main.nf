@@ -42,7 +42,7 @@ process get_merge_data {
         
 
     output:
-        path "merged_data.fasta"
+        path "merged_data.fasta", emit: merged_file
 
     script:
         """
@@ -51,18 +51,20 @@ process get_merge_data {
 }
 
 // aligning fasta seqs
-// process mafft_aligner {
-//     conda "mafft=7.526"
+process mafft_aligner {
+    conda "mafft=7.526"
 
-//     input:
+    input:
+        path merged_data
 
-//     output:
+    output:
+        path "alignment.fasta"
 
-//     script:
-//         """
-
-//         """
-// }
+    script:
+        """
+        mafft $merged_data > alignment.fasta
+        """
+}
 
 // // cleaning alignment
 // process trimal_cleanup {
@@ -95,5 +97,6 @@ workflow {
         .mix(ch_local_data)
         .collect()
         | get_merge_data
+        | mafft_aligner
       
 }
