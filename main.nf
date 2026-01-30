@@ -1,4 +1,4 @@
-// Help section
+// Documentation
 
 params.help = null
 
